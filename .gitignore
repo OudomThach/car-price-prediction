@@ -1,0 +1,39 @@
+# .gitignore
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment secrets — NEVER commit this
+.env
+
+# Scraped data output (generated at runtime)
+data/*.db
+data/*.parquet
+data/*.csv
+
+# Log files
+logs/
+*.log
+scraper.log
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+
+khmer24-data-scientist-intern-scraping-playbook.md
+PROJECT_PLAN.md
