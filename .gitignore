@@ -27,6 +27,13 @@ scraper.log
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/
 
+# Tool caches & coverage
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+
 # OS files
 .DS_Store
 Thumbs.db

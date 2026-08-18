@@ -1,0 +1,172 @@
+{
+  "info": {
+    "_postman_id": "8a32b61f-3d14-4981-a90c-f3e8b09d0124",
+    "name": "Cambodia Car Price Prediction API",
+    "description": "Production REST API for real-time car valuation, market intelligence, and dataset analytics powered by Khmer24.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check Probe",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Kubernetes / Docker container health & liveness probe."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Valuation (Prediction)",
+      "item": [
+        {
+          "name": "Predict Price - Toyota Camry 2019",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_brand\": \"Toyota\",\n  \"vehicle_model\": \"Camry\",\n  \"vehicle_model_year\": 2019,\n  \"vehicle_condition\": \"used\",\n  \"vehicle_tax_type\": \"plate number\",\n  \"vehicle_mileage_km\": 55000,\n  \"vehicle_transmission\": \"automatic\",\n  \"vehicle_fuel_type\": \"petrol\",\n  \"province\": \"phnom-penh\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/predict",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "predict"]
+            },
+            "description": "Estimate market value for a Toyota Camry."
+          }
+        },
+        {
+          "name": "Predict Price - Lexus RX350 2018",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_brand\": \"Lexus\",\n  \"vehicle_model\": \"RX350\",\n  \"vehicle_model_year\": 2018,\n  \"vehicle_condition\": \"used\",\n  \"vehicle_tax_type\": \"tax paper\",\n  \"vehicle_mileage_km\": 60000,\n  \"vehicle_transmission\": \"automatic\",\n  \"vehicle_fuel_type\": \"petrol\",\n  \"province\": \"phnom-penh\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/predict",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "predict"]
+            },
+            "description": "Estimate market value for a Lexus luxury SUV."
+          }
+        },
+        {
+          "name": "Predict Price - Ford Ranger 2022 (New)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_brand\": \"Ford\",\n  \"vehicle_model\": \"Ranger\",\n  \"vehicle_model_year\": 2022,\n  \"vehicle_condition\": \"new\",\n  \"vehicle_tax_type\": \"tax paper\",\n  \"vehicle_mileage_km\": 5000,\n  \"vehicle_transmission\": \"automatic\",\n  \"vehicle_fuel_type\": \"diesel\",\n  \"province\": \"phnom-penh\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/predict",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "predict"]
+            },
+            "description": "Estimate market value for a new Ford pickup truck."
+          }
+        },
+        {
+          "name": "Predict Price - General Market Prior Fallback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_brand\": \"RareBrand\",\n  \"vehicle_model\": \"UnknownModel\",\n  \"vehicle_model_year\": 2020,\n  \"vehicle_condition\": \"used\",\n  \"vehicle_tax_type\": \"plate number\",\n  \"province\": \"siem-reap\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/predict",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "predict"]
+            },
+            "description": "Tests graceful fallback to Cambodia macroeconomic automotive baseline."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Market Analytics",
+      "item": [
+        {
+          "name": "Get Market Intelligence Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/market/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "market", "summary"]
+            },
+            "description": "Aggregated price distributions, top brands, and data freshness stats."
+          }
+        }
+      ]
+    }
+  ]
+}

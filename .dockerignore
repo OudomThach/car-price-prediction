@@ -1,0 +1,30 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment secrets — never baked into images
+.env
+
+# Generated data & logs — mounted as volumes at runtime
+data/
+logs/
+
+# Build artifacts
+dist/
+*.egg-info/
+
+# VCS & IDE
+.git/
+.gitignore
+.idea/
+.vscode/
+*.drawio

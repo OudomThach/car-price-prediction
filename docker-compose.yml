@@ -1,0 +1,31 @@
+services:
+  # 🚀 REST API Service — serves Swagger UI and prediction endpoints
+  api:
+    build: .
+    image: car-price-prediction:latest
+    container_name: car-price-api
+    command: ["uv", "run", "python", "main.py", "--serve", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    environment:
+      KHMER24_DEVICE_ID: ${KHMER24_DEVICE_ID:-ds-intern-device-f4b8c10a}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+
+  # 🕷️ Data Ingestion Scraper — one-off or scheduled batch scrape
+  scraper:
+    build: .
+    image: car-price-prediction:latest
+    container_name: car-price-scraper
+    command: ["uv", "run", "python", "main.py"]
+    environment:
+      KHMER24_DEVICE_ID: ${KHMER24_DEVICE_ID:-ds-intern-device-f4b8c10a}
+      MAX_PAGES: ${MAX_PAGES:-20}
+      TARGET_CATEGORY: ${TARGET_CATEGORY:-cars-for-sale}
+      TARGET_PROVINCE: ${TARGET_PROVINCE:-}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: "no"

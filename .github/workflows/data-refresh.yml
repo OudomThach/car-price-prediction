@@ -1,0 +1,79 @@
+name: Data Refresh
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # daily 03:00 UTC (off-peak for Khmer24)
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: "Maximum pages to scrape (30 listings each)"
+        required: false
+        default: "20"
+      target_province:
+        description: "Province slug, e.g. phnom-penh (empty = all provinces)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-refresh
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KHMER24_DEVICE_ID: ${{ secrets.KHMER24_DEVICE_ID }}
+      KHMER24_PROXY: ${{ secrets.KHMER24_PROXY }}
+      HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
+      HTTP_PROXY: ${{ secrets.HTTP_PROXY }}
+      PYTHONUTF8: "1"
+      MAX_PAGES: ${{ inputs.max_pages || '20' }}
+      TARGET_PROVINCE: ${{ inputs.target_province }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Scrape and clean
+        run: uv run python main.py
+
+      - name: Commit & push data changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ logs/
+          git diff --cached --quiet || git commit -m "chore(data): refresh car listings $(date -u +%Y-%m-%d)"
+          git push
+        continue-on-error: true
+
+      - name: Upload Raw & Processed Data Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: car-data-${{ github.run_id }}
+          path: |
+            data/raw/*.parquet
+            data/raw/*.csv
+            data/processed/*.parquet
+            data/processed/*.csv
+            logs/scraper.log
+          retention-days: 30
