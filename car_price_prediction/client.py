@@ -93,11 +93,15 @@ class Khmer24Client:
         self.proxy = proxy or os.getenv("KHMER24_PROXY") or os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
         proxies = {"http": self.proxy, "https": self.proxy} if self.proxy else None
 
-        self._session = cf_requests.Session(impersonate=TLS_FINGERPRINT, timeout=20, proxies=proxies)
+        self._session = cf_requests.Session(
+            impersonate=TLS_FINGERPRINT, timeout=20, proxies=proxies  # type: ignore[arg-type]
+        )
         self._session.headers.update(DEFAULT_HEADERS)
 
         # Browser-flavored session for HTML detail pages
-        self._web_session = cf_requests.Session(impersonate=TLS_FINGERPRINT, timeout=20, proxies=proxies)
+        self._web_session = cf_requests.Session(
+            impersonate=TLS_FINGERPRINT, timeout=20, proxies=proxies  # type: ignore[arg-type]
+        )
         self._web_session.headers.update(
             {
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
